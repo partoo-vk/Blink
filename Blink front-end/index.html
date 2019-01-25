@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+<!-- define our angular app and set the controller -->
+<html ng-app="BlinkApp" ng-controller="BlinkApp">
+
+
+  <head>
+    <link rel="shortcut icon" type="image.png" href="favicon.png"/>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- stylesheets -->
+    <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/3.1.1/yeti/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+
+    <title>Blink</title>
+
+    <!-- Custom styles for this template -->
+    <link href="css/portfolio-item.css" rel="stylesheet">
+
+  </head>
+
+<body>
+
+<div style="text-align: center; color: white; background-color: lightseagreen; padding: 20px;">
+  <h1 style="font-size: 110px;" class="display-1">Blink</h1>
+  <p class="h2">Drive safely</p>
+</div>
+
+<div style="text-align: center;">
+  <h1 style="font-size: 80px;" class="display-1">Driver Status</h1>
+  <p id="status" class="h1 display-2">-</p>
+</div>
+
+<div id="collapseExample">
+  <div class="mainText card card-body">
+    Blink uses Microsoft's custom vision AI trained with photos of open and closed eyes. With a webcam, companies such as Uber, Lyft and Taxis can have service which monitor's their drivers (specifically whether they become impaired/unresponsive) if they drive a smart car. When Blink detects that the user's eyes have been closed for 5s, the system issues an alert using Twilio. Immediately the latitude and longitude are forwarded to an emergency contact of the driver, telling them the ID of the car in distress and the latitude and longitude of the car.
+  </div>
+</div>
+
+<div style="text-align: center; padding: 30px 30px;">
+  <img src="Blink.jpg" style="border-radius: 25px;">
+</div>
+
+<div class="footer">
+  <p>Made by Parto Vafaei, Kathrine VF, Elahe Jalalpour and Alex Jabbour</p>
+</div>
+
+    <!-- scripts -->
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-nvd3-directives/0.0.7/angularjs-nvd3-directives.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="app.js"></script>
+
+  </body>
+</html>
