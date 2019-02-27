@@ -26,3 +26,9 @@ body {
   color: white;
   text-align: center;
 }
+
+.my_camera{
+ width: 320px;
+ height: 240px;
+ border: 1px solid black;
+}

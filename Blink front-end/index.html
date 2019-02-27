@@ -42,24 +42,49 @@
   </div>
 </div>
 
-<div style="text-align: center; padding: 30px 30px;">
-  <img src="Blink.jpg" style="border-radius: 25px;">
-</div>
+<div id="my_camera"></div>
+<input type=button value="Take Snapshot" onClick="take_snapshot()">
+
+<div id="results" ></div>
+
+<!-- Webcam.min.js -->
+<script type="text/javascript" src="webcam.js"></script>
+
+<!-- Configure a few settings and attach camera -->
+<script language="JavaScript">
+ Webcam.set({
+  width: 320,
+  height: 240,
+  image_format: 'jpeg',
+  jpeg_quality: 90
+ });
+ Webcam.attach( '#my_camera' );
+
+<!-- Code to handle taking the snapshot and displaying it locally -->
+function take_snapshot() {
+
+ // take snapshot and get image data
+ Webcam.snap( function(data_uri) {
+  // display results in page
+  document.getElementById('results').innerHTML =
+  '<img src="'+data_uri+'"/>';
+  } );
+
+}
+</script>
 
 <div class="footer">
-  <p>Made by Parto Vafaei, Kathrine VF, Elahe Jalalpour and Alex Jabbour</p>
+  <p>Made by Parto Vafaei, Kathrine VF, Elaheh Jalalpour and Alex Jabbour</p>
 </div>
 
     <!-- scripts -->
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-nvd3-directives/0.0.7/angularjs-nvd3-directives.min.js"></script>
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 

@@ -2,22 +2,28 @@
 # pip install azure-cognitiveservices-vision-customvision
 # Python SDK Samples https://github.com/Azure-Samples/cognitive-services-python-sdk-samples/tree/master/samples
 
-from azure.cognitiveservices.vision.customvision.training import CustomVisionTrainingClient
-# from azure.cognitiveservices.vision.customvision.training.models import ImageUrlCreateEntry
-from azure.cognitiveservices.vision.customvision.prediction import CustomVisionPredictionClient
+# from web import app
+import numpy as np
 # import time
-import os
 import cv2
-import sys
-import json
 import requests
 import smartcar
-from flask import Flask
-from flask_restful import Resource, Api
+# from azure.cognitiveservices.vision.customvision.training.models import ImageUrlCreateEntry
+from azure.cognitiveservices.vision.customvision.prediction import CustomVisionPredictionClient
+from azure.cognitiveservices.vision.customvision.training import CustomVisionTrainingClient
+# from PIL import Image
+from flask import Flask, request, Response
+from flask_cors import cross_origin
 from twilio.rest import Client
+from PIL import Image
 
 app = Flask(__name__)
-api = Api(app)
+# api = Api(app)
+# parser = reqparse.RequestParser()
+# parser.add_argument('image', type=str)
+
+# parser.add_argument('function', type=dict)
+# parser.add_argument('position')
 
 # Set these variables based on the settings of your trained project
 SAMPLE_PROJECT_NAME = "OpenCloseEyesOnlyEye"
@@ -32,6 +38,7 @@ OPEN_EYES = "opened eyes"
 
 eyesflag = 1
 count = 0
+
 
 def message(id, loc):
         # Download the helper library from https://www.twilio.com/docs/python/install
@@ -75,6 +82,7 @@ def message(id, loc):
       "uri": "/2010-04-01/Accounts/ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Messages/SMXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.json"
     }
 
+
 def find_project():
         try:
             #print("Get trainer")
@@ -87,82 +95,108 @@ def find_project():
         except Exception as e:
             print(str(e))
 
-class Detection(Resource):
+
+# class Detection(Resource):
     #global count
     # count = 0
-    def get(self):
-        json_data = {"data": "open","loc":""}
 
-        video_capture = cv2.VideoCapture(0)
+    # def get(self):
+    #     pass
 
-        # Get predictor and project objects 
-        predictor = CustomVisionPredictionClient(prediction_key, endpoint=ENDPOINT)
-        project = find_project()
+@app.route('/data', methods=['POST'])
+@cross_origin()
+def post():
+    print(request.files['file'])
+    file = request.files['file']
+    file.save("/Users/elahejalalpour/Documents/GitHub/Blink/" + file.filename)
+    # convert string of image data to uint8
+    # nparr = np.fromstring(r.data, np.uint8)
+    # print(len(nparr))
+    # img = Image.fromarray(nparr.reshape(28, 28), 'L')
+
+    # decode image
+    # img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    # print(img)
+    # with open("/Users/elahejalalpour/Documents/GitHub/Blink/color_img.jpeg", 'wb') as file:
+    #     file.write(r.data)
+    #
+    json_data = {"data": "open", "loc": ""}
+
+    # video_capture = cv2.VideoCapture(0)
+
+    # Get predictor and project objects
+    predictor = CustomVisionPredictionClient(prediction_key, endpoint=ENDPOINT)
+    project = find_project()
+    print('here')
+    # img = Image.fromarray(nparr, 'RGB')
 
 
-        ret, frame = video_capture.read()
-        #print (ret)
-        cv2.imwrite('./color_img.jpg', frame)
-        #cv2.imshow('Video', frame)
-        try:
-            with open('./color_img.jpg', mode="rb") as test_data:
-                results = predictor.predict_image(project.id, test_data.read())
+    # ret, frame = video_capture.read()
+    #print (ret)
+    # cv2.imwrite('/Users/elahejalalpour/Documents/GitHub/Blink/color_img.jpeg', img)
+    #cv2.imshow('Video', frame)
+    try:
+        with open('/Users/elahejalalpour/Documents/GitHub/Blink/image.jpeg', mode="rb") as test_data:
+            results = predictor.predict_image(project.id, test_data)
 
-        except Exception as e:
-            print(str(e))
-            input()
-        # Display the results.
-        for prediction in results.predictions:
-            #print(prediction.tag_name + ": {0:.2f}%".format(prediction.probability * 100))
-            
-            if prediction.tag_name == CLOSED_EYES:
-                if ((prediction.probability * 100) > 0.01):
-                    global count
-                    count += 1
-                    if count == 1:
-                                                                                  
-                        # global count
-                        count = 0
-                       
-                        acc = '66ae978d-d815-4f75-8fe0-fc765dc5b829'
-                        req = smartcar.get_vehicle_ids(acc)
-                        vld = req['vehicles'][0]
-                        v = smartcar.Vehicle(vld, acc)
-                        print(v.location())
-                        json_data = {"data":"closed", "loc":v.location()['data']}
-                        message(vld, v.location()['data'])
-                        #request.put(json=json_data)
-                        print("hazard!")
-                    url = 'https://www.jsonstore.io/962b54063ad9a4019de7f1629eea83173b549ae39f2d064e1f9f724b35851731'
-                    headers = {'Content-Type':'application/json'}
-                    requests.post(url,json=json_data,headers=headers)
-                else:
-                    json_data = {"data": "open","loc":""}
-                    url = 'https://www.jsonstore.io/962b54063ad9a4019de7f1629eea83173b549ae39f2d064e1f9f724b35851731'
-                    headers = {'Content-Type':'application/json'}
-                    requests.post(url,json=json_data,headers=headers)
+    except Exception as e:
+        print(str(e))
+        input()
+    # Display the results.
+    for prediction in results.predictions:
+        #print(prediction.tag_name + ": {0:.2f}%".format(prediction.probability * 100))
+
+        if prediction.tag_name == CLOSED_EYES:
+            if ((prediction.probability * 100) > 0.01):
+                global count
+                count += 1
+                if count == 1:
+
+                    # global count
                     count = 0
 
-                #send_main(SRC, DST, "!!!")
-            # else: 
-            #     json_data = {"data":"allgood", "loc":""}
-            #     #global count
-            #     #count = 0
-            
-            # input()
-            # if cv2.waitKey(1) & 0xFF == ord('q'):
-            #     break
-        video_capture.release()
-        cv2.destroyAllWindows()
+                    acc = '66ae978d-d815-4f75-8fe0-fc765dc5b829'
+                    # req = smartcar.get_vehicle_ids(acc)
+                    # vld = req['vehicles'][0]
+                    # v = smartcar.Vehicle(vld, acc)
+                    # print(v.location())
+                    # json_data = {"data": "closed", "loc": v.location()['data']}
+                    json_data = {"data": "closed", "loc": "hi"}
+                    # message(vld, v.location()['data'])
+                    #request.put(json=json_data)
+                    print("hazard!")
+                url = 'https://www.jsonstore.io/962b54063ad9a4019de7f1629eea83173b549ae39f2d064e1f9f724b35851731'
+                headers = {'Content-Type': 'application/json'}
+                requests.post(url, json=json_data, headers=headers)
+            else:
+                json_data = {"data": "open", "loc": ""}
+                url = 'https://www.jsonstore.io/962b54063ad9a4019de7f1629eea83173b549ae39f2d064e1f9f724b35851731'
+                headers = {'Content-Type': 'application/json'}
+                requests.post(url, json=json_data, headers=headers)
+                count = 0
 
-        return json_data
+            #send_main(SRC, DST, "!!!")
+        # else:
+        #     json_data = {"data":"allgood", "loc":""}
+        #     #global count
+        #     #count = 0
 
-api.add_resource(Detection, '/')
+        # input()
+        # if cv2.waitKey(1) & 0xFF == ord('q'):
+        #     break
+    # video_capture.release()
+    # cv2.destroyAllWindows()
+
+    return Response(json_data)
 
 
-if __name__ == '__main__':
+def run():
+    # api.add_resource(Detection, '/data')
+    app.run(debug=True, port=5001)
+
+# if __name__ == '__main__':
     # global count
-    count =0
-    app.run(debug=True, port = 5001)
+count = 0
+run()
 
 
