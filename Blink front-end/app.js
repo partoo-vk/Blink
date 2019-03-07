@@ -8,7 +8,7 @@ function change_status(ting) {
 	else if (ting == "closed") {
 		document.getElementById("status").innerHTML = "STOP DRIVING";
     	document.getElementById("status").style = "color: red;";
-    	// keepRunning = 0;
+    	keepRunning = 0;
 	}
 }
 var BlinkApp = angular.module('BlinkApp', []);
@@ -38,6 +38,15 @@ function take_snapshot($http) {
  	var blob = dataURLtoBlob(data_uri);
 	var fd = new FormData();
 	fd.append('file', blob, 'image.jpeg');
+	// var req = {
+	//     image: blob};
+	// navigator.geolocation.getCurrentPosition(function(position) {
+    // fd.append('lat', position.coords.latitude, 'location');
+    // fd.append('long', position.coords.longitude, 'location');
+    // req.lat = position.coords.latitude;
+    // req.long = position.coords.longitude;
+    // console.log(req)
+    // });
 	$.ajax({
       type: 'POST',
       url: 'http://localhost:5001/data',
@@ -82,4 +91,28 @@ function dataURLtoBlob(dataurl) {
         u8arr[n] = bstr.charCodeAt(n);
     }
     return new Blob([u8arr], {type:mime});
+}
+
+function geoFindMe() {
+
+  const status = document.querySelector('#status');
+  const mapLink = document.querySelector('#map-link');
+
+  function success(position) {
+    const latitude  = position.coords.latitude;
+    const longitude = position.coords.longitude;
+
+  }
+
+  function error() {
+    status.textContent = 'Unable to retrieve your location';
+  }
+
+  if (!navigator.geolocation) {
+    status.textContent = 'Geolocation is not supported by your browser';
+  } else {
+    status.textContent = 'Locating…';
+    navigator.geolocation.getCurrentPosition(success, error);
+  }
+
 }

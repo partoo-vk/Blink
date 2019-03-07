@@ -27,8 +27,17 @@ body {
   text-align: center;
 }
 
-.my_camera{
- width: 320px;
- height: 240px;
- border: 1px solid black;
+#photo-cont{
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#my_camera{
+    float: left;
+    padding-right: 30px;
+}
+
+#results{
+    float: left;
 }
