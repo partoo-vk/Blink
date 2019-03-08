@@ -55,8 +55,10 @@ def parse_args(parser):
     opts = vars(parser.parse_args(sys.argv[1:]))
     return opts
 
-opts = parse_args(def_parser())
-acc = opts['a']
+# opts = parse_args(def_parser())
+# acc = opts['a']
+
+acc = 'a2c005a4-a2e5-4a90-8a6c-f6af0491d8c1'
 
 
 def message(id, loc):
@@ -149,7 +151,6 @@ def post():
 
 def run():
     # api.add_resource(Detection, '/data')
-
     app.run(debug=True, port=5001)
 
 run()
