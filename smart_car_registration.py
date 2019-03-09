@@ -11,8 +11,6 @@ CORS(app)
 # global variable to save our access_token
 access = None
 
-# TODO: Authorization Step 1a: Launch Smartcar authorization dialog
-
 client = smartcar.AuthClient(
     client_id='dc343191-8dc6-4e60-bdd7-15d8a3148acd',
     client_secret='653ed077-940b-4088-92fe-053134a0ad98',
