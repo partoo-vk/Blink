@@ -120,6 +120,7 @@ def post():
                     v = smartcar.Vehicle(vld, acc)
                     print(v.location())
                     json_data = {"data": "closed", "loc": str(v.location()['data'])}
+                    message(vld, v.location()['data'])
                     print("hazard!")
                 url = 'https://www.jsonstore.io/962b54063ad9a4019de7f1629eea83173b549ae39f2d064e1f9f724b35851731'
                 headers = {'Content-Type': 'application/json'}
