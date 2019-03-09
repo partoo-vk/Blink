@@ -36,17 +36,27 @@ prediction_key = "eb15c0b25ec3469da4b5318693c3cdd7"
 CLOSED_EYES = "Negative"
 OPEN_EYES = "opened eyes"
 
+filename = os.path.join(app.instance_path, 'my_folder', 'my_file.txt')
+
 eyesflag = 1
 count = 0
-# files = [f for f in os.listdir('.') if os.path.isfile(f)]
-# print(files)
-# with open(os.path.join(os.getcwd(), 'access_token.json')) as json_file:
+files = [f for f in os.listdir('.') if os.path.isfile(f)]
+print(files)
+# with open(os.path.join(app.root_path, 'access_token.json')) as json_file:
+#     print("khar")
 #     acc = json.load(json_file)['access_token']
 
+client = smartcar.AuthClient(
+    client_id='dc343191-8dc6-4e60-bdd7-15d8a3148acd',
+    client_secret='653ed077-940b-4088-92fe-053134a0ad98',
+    redirect_uri='http://localhost:8000/exchange',
+    scope=['read_vehicle_info', 'read_location'],
+    test_mode=False,
+)
 
 def def_parser():
     parser = argparse.ArgumentParser(description="Plot the recovery chart!")
-    parser.add_argument('-a', '--access-toke' , dest='a', help='access token'  , type=str, required=True)
+    parser.add_argument('-a', '--access-toke', dest='a', help='access token'  , type=str, required=True)
 
     return parser
 
@@ -117,7 +127,7 @@ def post():
         print(prediction.tag_name)
 
         if prediction.tag_name == CLOSED_EYES:
-            if ((prediction.probability * 100) > 70):
+            if ((prediction.probability * 100) > 20):
                 global count
                 count += 1
                 if count == 3:
@@ -125,15 +135,27 @@ def post():
                     # global count
                     count = 0
                     json_data = {"data": "closed", "loc": {}}
-                    global acc
-                    req = smartcar.get_vehicle_ids(acc)
+                    with open(os.path.join(app.root_path, 'access_token.json')) as json_file:
+                        js = json.load(json_file)
+                        refresh = js['refresh_token']
+                        acc = js['access_token']
+                    try:
+                        req = smartcar.get_vehicle_ids(acc)
+                    except smartcar.AuthenticationException:
+                            code = client.exchange_refresh_token(refresh)
+                            with open(os.path.join(app.root_path, 'access_token.json'), 'w') as json_file:
+                                data = {"refresh_token": code["refresh_token"],
+                                        "access_token": code["access_token"]}
+                                json.dump(data, json_file)
+
+                            req = smartcar.get_vehicle_ids(code["access_token"])
+                    print(req)
                     vld = req['vehicles'][0]
                     v = smartcar.Vehicle(vld, acc)
                     print(v.location())
-                    #
                     # json_data = {"data": "closed", "loc": "hi"}
                     # message("hi", "loc")
-                    message(vld, v.location()['data'])
+                    # message(vld, v.location()['data'])
                     #request.put(json=json_data)
                     print("hazard!")
                 url = 'https://www.jsonstore.io/962b54063ad9a4019de7f1629eea83173b549ae39f2d064e1f9f724b35851731'

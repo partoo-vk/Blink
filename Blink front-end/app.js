@@ -64,7 +64,7 @@ function take_snapshot($http) {
 }
 
 run();
-setInterval(run, 3000);
+setInterval(run, 1000);
 
 });
 
