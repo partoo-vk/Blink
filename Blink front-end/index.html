@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
 
-    <title>Blink</title>
+    <title>SafeTrip</title>
 
     <!-- Custom styles for this template -->
     <link href="css/portfolio-item.css" rel="stylesheet">
@@ -26,36 +26,36 @@
 
 <body>
 
-<div style="text-align: center; color: white; background-color: lightseagreen; padding: 20px;">
-  <h1 style="font-size: 110px;" class="display-1">Blink</h1>
-  <p class="h2">Drive safely</p>
+<div style="text-align: center; color: white; background-color: midnightblue; padding: 5px;">
+  <h1 style="font-size: 50px;" class="display-1">SafeTrip</h1>
+  <p class="h3">Drive safely</p>
 </div>
 
 <div style="text-align: center;">
-  <h1 style="font-size: 80px;" class="display-1">Driver Status</h1>
-  <p id="status" class="h1 display-2">-</p>
+  <h1 style="font-size: 40px; padding: 10px;" class="display-1">Status:</h1>
+  <p id="status" class="h2 display-2">-</p>
 </div>
-
-<div id="collapseExample">
-  <div class="mainText card card-body">
-    Blink uses Microsoft's custom vision AI trained with photos of open and closed eyes. With a webcam, companies such as Uber, Lyft and Taxis can have service which monitor's their drivers (specifically whether they become impaired/unresponsive) if they drive a smart car. When Blink detects that the user's eyes have been closed for 5s, the system issues an alert using Twilio. Immediately the latitude and longitude are forwarded to an emergency contact of the driver, telling them the ID of the car in distress and the latitude and longitude of the car.
-  </div>
-</div>
-<div id="photo-cont">
+<div class="photo-cont">
     <div id="my_camera"></div>
 
-    <div id="results" ></div>
+    <!-- <div id="results" ></div> -->
 </div>
+<div id="collapseExample">
+  <div class="mainText card card-body">
+    SafeTrip uses Microsoft's custom vision AI trained with photos of open and closed eyes. With a webcam, companies such as Uber, Lyft and Taxis can have service which monitor's their drivers (specifically whether they become impaired/unresponsive) if they drive a smart car. When SafeTrip detects that the user's eyes have been closed for 3s, the system issues an alert using Twilio. Immediately the latitude and longitude are forwarded to an emergency contact of the driver, telling them the ID of the car in distress and the latitude and longitude of the car.
+  </div>
+</div>
+
 <!-- Webcam.min.js -->
 <script type="text/javascript" src="webcam.js"></script>
 
 <!-- Configure a few settings and attach camera -->
 <script language="JavaScript">
  Webcam.set({
-  width: 320,
-  height: 240,
+  width: 220,
+  height: 140,
   image_format: 'jpeg',
-  jpeg_quality: 90
+  jpeg_quality: 100
  });
  Webcam.attach( '#my_camera' );
 
@@ -73,7 +73,7 @@ function take_snapshot() {
 </script>
 
 <div class="footer">
-  <p>Made by Parto Vafaei, Kathrine VF, Elaheh Jalalpour and Alex Jabbour</p>
+  <p>Made by Partoo Vafaeikia, Kathrine VF and Elaheh Jalalpour</p>
 </div>
 
     <!-- scripts -->

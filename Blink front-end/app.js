@@ -3,11 +3,11 @@ var keepRunning = 1;
 function change_status(ting) {
 	if (ting == "open"){
 	    document.getElementById("status").innerHTML = "No Hazard detected";
-	    document.getElementById("status").style = "color: green;";
+	    document.getElementById("status").style = "color: green; padding: 10px;font-size: 30px;";
 	}
 	else if (ting == "closed") {
 		document.getElementById("status").innerHTML = "STOP DRIVING";
-    	document.getElementById("status").style = "color: red;";
+    	document.getElementById("status").style = "color: red; padding: 10px;font-size: 30px;";
     	keepRunning = 0;
 	}
 }

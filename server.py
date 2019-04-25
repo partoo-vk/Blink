@@ -27,9 +27,9 @@ app = Flask(__name__)
 SAMPLE_PROJECT_NAME = "OpenCloseEyesOnlyEye"
 ENDPOINT = "https://southcentralus.api.cognitive.microsoft.com"
 training_endpoint = "https://southcentralus.api.cognitive.microsoft.com/customvision/v2.2/Training/"
-prediction_endpoint = "https://southcentralus.api.cognitive.microsoft.com/customvision/v2.0/Prediction/"
+prediction_endpoint = "https://southcentralus.api.cognitive.microsoft.com/customvision/v3.0/Prediction/"
 training_key = "db452ef08d47430187c98ea32d2aa6dc"
-prediction_key = "eb15c0b25ec3469da4b5318693c3cdd7"
+prediction_key = "4c08665e1853437eb0c9710b012fb3a7"
 
 CLOSED_EYES = "Negative"
 OPEN_EYES = "opened eyes"
@@ -96,6 +96,7 @@ def post():
         print(prediction.tag_name)
 
         if prediction.tag_name == CLOSED_EYES:
+            print ("CLOSED EYESSSS")
             if ((prediction.probability * 100) > 70):
                 global count
                 count += 1
@@ -121,6 +122,7 @@ def post():
                     print(v.location())
                     json_data = {"data": "closed", "loc": str(v.location()['data'])}
                     message(vld, v.location()['data'])
+                    os.system('afplay ./alert.mp3')
                     print("hazard!")
                 url = 'https://www.jsonstore.io/962b54063ad9a4019de7f1629eea83173b549ae39f2d064e1f9f724b35851731'
                 headers = {'Content-Type': 'application/json'}
