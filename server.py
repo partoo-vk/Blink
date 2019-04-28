@@ -3,20 +3,16 @@
 # Python SDK Samples https://github.com/Azure-Samples/cognitive-services-python-sdk-samples/tree/master/samples
 
 # from web import app
-import argparse
+#import argparse
 import os
-
 import json
-
-import numpy as np
-# import time
-import cv2
+#import numpy as np
+#import cv2
 import requests
 import smartcar
-import sys
+#import sys
 from azure.cognitiveservices.vision.customvision.prediction import CustomVisionPredictionClient
 from azure.cognitiveservices.vision.customvision.training import CustomVisionTrainingClient
-# from PIL import Image
 from flask import Flask, request, Response
 from flask_cors import cross_origin
 from twilio.rest import Client
@@ -24,15 +20,15 @@ from twilio.rest import Client
 app = Flask(__name__)
 
 # Set these variables based on the settings of your trained project
-SAMPLE_PROJECT_NAME = "OpenCloseEyesOnlyEye"
+SAMPLE_PROJECT_NAME = "SafeTripProjectNew"
 ENDPOINT = "https://southcentralus.api.cognitive.microsoft.com"
-training_endpoint = "https://southcentralus.api.cognitive.microsoft.com/customvision/v2.2/Training/"
+training_endpoint = "https://southcentralus.api.cognitive.microsoft.com/customvision/v3.0/Training/"
 prediction_endpoint = "https://southcentralus.api.cognitive.microsoft.com/customvision/v3.0/Prediction/"
-training_key = "db452ef08d47430187c98ea32d2aa6dc"
+training_key = "24745e033ff54714ace84b9ba0268d32"
 prediction_key = "4c08665e1853437eb0c9710b012fb3a7"
 
-CLOSED_EYES = "Negative"
-OPEN_EYES = "opened eyes"
+CLOSED_EYES = "closed"
+OPEN_EYES = "opened"
 
 filename = os.path.join(app.instance_path, 'my_folder', 'my_file.txt')
 
@@ -52,7 +48,7 @@ acc = 'a2c005a4-a2e5-4a90-8a6c-f6af0491d8c1'
 
 
 def message(id, loc):
-    # Your Account Sid and Auth Token from twilio.com/console
+    # Account Sid and Auth Token from twilio.com/console
     account_sid = 'AC363498a917b702d17a677bb715a4c052'
     auth_token = 'f12b59db47775c5e4437f85cd3730b83'
     client = Client(account_sid, auth_token)
