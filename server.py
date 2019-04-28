@@ -83,17 +83,20 @@ def post():
 
     # Get predictor and project objects
     predictor = CustomVisionPredictionClient(prediction_key, endpoint=ENDPOINT)
+
     project = find_project()
 
-    results = predictor.predict_image(project.id, file.stream.read())
+    results = predictor.classify_image(project.id, "Iteration16", file.stream.read())
+
     print(results.predictions)
 
     for prediction in results.predictions:
         print(prediction.tag_name)
 
         if prediction.tag_name == CLOSED_EYES:
-            print ("CLOSED EYESSSS")
             if ((prediction.probability * 100) > 70):
+                print ("CLOSED EYESSSS")
+
                 global count
                 count += 1
                 if count == 3:
