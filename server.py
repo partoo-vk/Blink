@@ -46,8 +46,10 @@ client = smartcar.AuthClient(
 
 acc = 'a2c005a4-a2e5-4a90-8a6c-f6af0491d8c1'
 
+##*** use below code instead of the one below it to use smartcar
+#def message(id, loc):
+def message(loc):
 
-def message(id, loc):
     # Account Sid and Auth Token from twilio.com/console
     account_sid = 'AC363498a917b702d17a677bb715a4c052'
     auth_token = 'f12b59db47775c5e4437f85cd3730b83'
@@ -55,12 +57,12 @@ def message(id, loc):
 
     message = client.messages \
                     .create(
-                         body=f"Hello, you have been listed as an emergency contact. My smartcar ID is {id}. I feel sleepy and cannot drive. Please pick me up at: {loc}",
+                         body=f"Hello, you have been listed as an emergency contact. I feel sleepy and cannot drive. Please pick me up at: https://www.bing.com/maps/?v=2&cp={loc['lat']},{loc['lng']}&lvl=18&dir=0&sty=o&sp=point.{loc['lat']}_{loc['lng']}_Driver%20is%20here",
                          from_='+16476942899',
                          to='+16472280355'
                      )
 
-    print(message.sid)
+    #print(message.sid)
 
 
 def find_project():
@@ -79,6 +81,10 @@ def post():
 
     file = request.files['file']
 
+    loc = request.form['jsn']
+    loc= json.loads(loc)
+
+
     json_data = {"data": "open", "loc": ""}
 
     # Get predictor and project objects
@@ -86,53 +92,54 @@ def post():
 
     project = find_project()
 
-    results = predictor.classify_image(project.id, "Iteration16", file.stream.read())
-
-    print(results.predictions)
+    results = predictor.classify_image(project.id, "Iteration24", file.stream.read())
 
     for prediction in results.predictions:
         print(prediction.tag_name)
-
+        print(prediction.probability)
         if prediction.tag_name == CLOSED_EYES:
             if ((prediction.probability * 100) > 70):
-                print ("CLOSED EYESSSS")
-
+                print ("closed eyes")
                 global count
                 count += 1
                 if count == 3:
                     count = 0
-                    # json_data = {"data": "closed", "loc": {}}
-                    with open(os.path.join(app.root_path, 'access_token.json')) as json_file:
-                        js = json.load(json_file)
-                        refresh = js['refresh_token']
-                        acc = js['access_token']
-                    try:
-                        req = smartcar.get_vehicle_ids(acc)
-                    except smartcar.AuthenticationException:
-                            code = client.exchange_refresh_token(refresh)
-                            with open(os.path.join(app.root_path, 'access_token.json'), 'w') as json_file:
-                                data = {"refresh_token": code["refresh_token"],
-                                        "access_token": code["access_token"]}
-                                json.dump(data, json_file)
+                    ##**** uncomment these if you want to use smartcar API
+                    # with open(os.path.join(app.root_path, 'access_token.json')) as json_file:
+                    #     js = json.load(json_file)
+                    #     refresh = js['refresh_token']
+                    #     acc = js['access_token']
+                    # try:
+                    #     req = smartcar.get_vehicle_ids(acc)
+                    # except smartcar.AuthenticationException:
+                    #         code = client.exchange_refresh_token(refresh)
+                    #         with open(os.path.join(app.root_path, 'access_token.json'), 'w') as json_file:
+                    #             data = {"refresh_token": code["refresh_token"],
+                    #                     "access_token": code["access_token"]}
+                    #             json.dump(data, json_file)
 
-                            req = smartcar.get_vehicle_ids(code["access_token"])
-                    vld = req['vehicles'][0]
-                    v = smartcar.Vehicle(vld, acc)
-                    print(v.location())
-                    json_data = {"data": "closed", "loc": str(v.location()['data'])}
-                    message(vld, v.location()['data'])
+                    #         req = smartcar.get_vehicle_ids(code["access_token"])
+                    # vld = req['vehicles'][0]
+                    # v = smartcar.Vehicle(vld, acc)
+                    # print(v.location())
+                    json_data = {"data": "closed", "loc": loc}#str(v.location()['data'])}
+                    ##*** use below code instead of the one below it to use smartcar
+                    #message(vld, v.location()['data'])
+                    message(loc)
                     os.system('afplay ./alert.mp3')
                     print("hazard!")
                 url = 'https://www.jsonstore.io/962b54063ad9a4019de7f1629eea83173b549ae39f2d064e1f9f724b35851731'
                 headers = {'Content-Type': 'application/json'}
                 requests.post(url, json=json_data, headers=headers)
             else:
+                #print("opeeenn")
                 json_data = {"data": "open", "loc": ""}
                 url = 'https://www.jsonstore.io/962b54063ad9a4019de7f1629eea83173b549ae39f2d064e1f9f724b35851731'
                 headers = {'Content-Type': 'application/json'}
                 requests.post(url, json=json_data, headers=headers)
                 # global count
                 count = 0
+        
     return Response(json_data)
 
 

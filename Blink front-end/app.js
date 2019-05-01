@@ -1,5 +1,24 @@
 var keepRunning = 1;
 
+function getLocation(callback) {
+    if (navigator.geolocation) {
+        var lat_lng = navigator.geolocation.watchPosition(function(position){
+        console.log(position);
+          var user_position = {};
+          user_position.lat = position.coords.latitude; 
+          user_position.lng = position.coords.longitude; 
+          callback(user_position);
+       });
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+getLocation(function(lat_lng){
+  console.log(lat_lng);
+});
+
+
+
 function change_status(ting) {
 	if (ting == "open"){
 	    document.getElementById("status").innerHTML = "No Hazard detected";
@@ -14,41 +33,46 @@ function change_status(ting) {
 var BlinkApp = angular.module('BlinkApp', []);
 BlinkApp.controller('BlinkApp', function($scope, $http){
     function run() {
+
 	if(keepRunning == 1){
 		take_snapshot($http);
+		
 	  $http.get("https://www.jsonstore.io/962b54063ad9a4019de7f1629eea83173b549ae39f2d064e1f9f724b35851731")
 	  .success(function(data){
 	    $scope.rates = data;
-	    console.log(data);
-	    console.log(data.result.data);
 		change_status(data.result.data);
-		console.log(keepRunning);
+		//console.log(data.result.data);
+		//message();
 
-	  }
-	  );
+	  });
 	 }
 }
 
 function take_snapshot($http) {
-
- Webcam.snap( function(data_uri) {
+getLocation(function(lat_lng){
+ Webcam.snap(function(data_uri) {
  	var blob = dataURLtoBlob(data_uri);
 	var fd = new FormData();
 	fd.append('file', blob, 'image.jpeg');
+	var jsn = lat_lng;
+	fd.append('jsn', JSON.stringify( jsn ));
 	$.ajax({
       type: 'POST',
       url: 'http://localhost:5001/data',
+      crossOrigin: null,
       data: fd,
       cache: false,
       processData: false,
       contentType: false
     }).done(function(data) {
-      console.log(data);
     });
-    document.getElementById('results').innerHTML =
-    '<img src="'+data_uri+'"/>';
+    // document.getElementById('results').innerHTML =
+    // '<img src="'+data_uri+'"/>';
   } );
+ });
+
 }
+
 
 run();
 setInterval(run, 2000);
