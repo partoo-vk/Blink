@@ -90,7 +90,7 @@ cffi==1.11.5
 chardet==3.0.4
 Click==7.0
 cryptography==2.4.2
-Django==2.1.5
+Django==2.2.13
 Flask==1.0.2
 Flask-Cors==3.0.7
 Flask-RESTful==0.3.7
