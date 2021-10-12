@@ -103,7 +103,7 @@ msrest==0.6.4
 msrestazure==0.6.0
 numpy==1.16.1
 oauthlib==3.0.0
-opencv-python==4.0.0.21
+opencv-python==4.1.1.26
 opencv-python-headless==4.0.0.21
 Pillow==6.2.0
 pycparser==2.19
