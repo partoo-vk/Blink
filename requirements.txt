@@ -107,7 +107,7 @@ opencv-python==4.0.0.21
 opencv-python-headless==4.0.0.21
 Pillow==6.2.0
 pycparser==2.19
-PyJWT==1.7.1
+PyJWT==2.4.0
 PySocks==1.6.8
 python-dateutil==2.7.5
 pytz==2018.9
